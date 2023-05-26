@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include <mem.h>
+#include <string.h>
 #include "taproot.h"
 
 
@@ -51,11 +51,20 @@ void TapRoot_PushEvent(TapRoot_Event event, TapRoot_Id destination, TapRoot_Thre
 	
 }
 
-void TapRoot_GetLock(TapRoot_EventQueue* queue);
+void TapRoot_GetLock(TapRoot_EventQueue* queue)
+{
+	pthread_mutex_lock(&queue->mutex);
+}
 
-int TapRoot_MaybeGetLock(TapRoot_EventQueue* queue);
+int TapRoot_MaybeGetLock(TapRoot_EventQueue* queue)
+{
+	return pthread_mutex_trylock(&queue->mutex);
+}
 
-void TapRoot_Unlock(TapRoot_EventQueue* queue);
+void TapRoot_Unlock(TapRoot_EventQueue* queue)
+{
+	pthread_mutex_unlock(&queue->mutex);
+}
 
 void TapRoot_ClearQueue(TapRoot_EventQueue* queue);
 
