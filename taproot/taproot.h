@@ -25,6 +25,7 @@ typedef struct TapRoot_ThreadGlobal
        TapRoot_Id* AddressableThreads;
 struct TapRoot_ThreadGlobal** AddressableThreadGlobals;
        TapRoot_EventQueue* ThreadQueues;
+	   pthread_mutex_t mutex;
        uint64_t AddressableThreadCount;
        uint64_t EventQueueCount;
 	   uint64_t __AddrThAlloc;
@@ -39,7 +40,7 @@ int TapRoot_CreateThread(TapRoot_Id NewThreadId, TapRoot_ThreadGlobal inherit, v
 
 TapRoot_Event TapRoot_IntoEvent(uint32_t type, void* data);
 
-void TapRoot_PushEvent(TapRoot_Event event, TapRoot_Id destination, TapRoot_ThreadGlobal* global);
+int TapRoot_PushEvent(TapRoot_Event event, TapRoot_Id destination, TapRoot_ThreadGlobal* global);
 
 void TapRoot_GetLock(TapRoot_EventQueue* queue);
 
