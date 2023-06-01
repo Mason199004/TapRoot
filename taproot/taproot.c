@@ -102,13 +102,32 @@ void TapRoot_Unlock(TapRoot_EventQueue* queue)
 
 void TapRoot_ClearQueue(TapRoot_EventQueue* queue)
 {
-
+	queue->__iter = 0;
 	queue->EventCount = 0;
-
 }
 
 int32_t TapRoot_CreateWorker(TapRoot_ThreadGlobal* self, void* (*func)(void* threadGlobal))
 {
+	TapRoot_ThreadGlobal* thgl =  malloc(sizeof(TapRoot_ThreadGlobal));
+	memcpy(thgl, self, sizeof(TapRoot_ThreadGlobal));
+
+	if (thgl->Self + 1 < 0)
+	{
+		return -1;
+	}
+	thgl->Self++;
+
+	TapRoot_InsertNewThread(self, thgl);
+
+	pthread_t p;
+	int thread = pthread_create(&p, NULL, func, thgl);
+	if (thread) //not good
+	{
+		TapRoot_DestroySelf(thgl); /* not efficient error handling but can prevent issues caused by the target thread spawning immediately
+		                                  and not being addressable or receivable by other threads */
+		return -1;
+	}
+
 	return 0;
 }
 
@@ -205,4 +224,19 @@ void TapRoot_InsertNewThread(TapRoot_ThreadGlobal* target, TapRoot_ThreadGlobal*
 
 
 	pthread_mutex_unlock(&target->mutex);
+}
+
+TapRoot_Event* TapRoot_NextInQueue(TapRoot_EventQueue* queue)
+{
+	if (queue->__iter > queue->EventCount)
+	{
+		return NULL;
+	}
+
+	return &queue->EventQueue[queue->__iter++];
+}
+
+bool TapRoot_QueueHasEvents(TapRoot_EventQueue* queue)
+{
+	return queue->EventCount > 0;
 }

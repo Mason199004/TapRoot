@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdbool.h>
 #include <pthread.h>
 
 typedef uint64_t TapRoot_Id; //4 byte ascii identifier 4 byte int worker id
@@ -17,6 +18,7 @@ typedef struct
 	TapRoot_Event* EventQueue;
 	pthread_mutex_t mutex;
 	uint32_t EventCount;
+	uint32_t __iter;
 } TapRoot_EventQueue;
 
 typedef struct TapRoot_ThreadGlobal
@@ -63,6 +65,10 @@ typedef enum
 void TapRoot_ResizeBuffer(TapRoot_ThreadGlobal* global, TapRoot_ResizableBuffer bufferType, uint64_t newSize);
 
 void TapRoot_InsertNewThread(TapRoot_ThreadGlobal* target, TapRoot_ThreadGlobal* toInsert);
+
+TapRoot_Event* TapRoot_NextInQueue(TapRoot_EventQueue* queue); //read then inc
+
+bool TapRoot_QueueHasEvents(TapRoot_EventQueue* queue);
 
 
 
