@@ -48,7 +48,7 @@ TapRoot_Event TapRoot_IntoEvent(uint32_t type, void* data)
 
 void TapRoot_PushEvent(TapRoot_Event event, TapRoot_Id destination, TapRoot_ThreadGlobal* global)
 {
-	
+
 }
 
 void TapRoot_GetLock(TapRoot_EventQueue* queue);
