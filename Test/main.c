@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
-#include "taproot/taproot.h"
+#include "../taproot/taproot.h"
 
 
 void* test (void* glob)

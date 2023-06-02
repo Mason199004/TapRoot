@@ -3,4 +3,13 @@ project(TapRoot C)
 
 set(CMAKE_C_STANDARD 23)
 
-add_executable(TapRoot main.c taproot/taproot.c taproot/taproot.h)
+enable_testing()
+
+add_library(TapRoot taproot/taproot.c taproot/taproot.h)
+
+add_executable(TapRootTest Test/main.c taproot/taproot.c taproot/taproot.h)
+
+add_test(
+        NAME TestTapRoot
+        COMMAND TapRootTest
+)
