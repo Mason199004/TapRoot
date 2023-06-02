@@ -240,3 +240,14 @@ bool TapRoot_QueueHasEvents(TapRoot_EventQueue* queue)
 {
 	return queue->EventCount > 0;
 }
+
+TapRoot_EventQueue* GetQueue(TapRoot_ThreadGlobal* global, TapRoot_Id id)
+{
+	for (int i = 0; i < global->EventQueueCount; ++i)
+	{
+		if (global->ThreadQueues[i].ReceiverId == id)
+		{
+			return &global->ThreadQueues[i];
+		}
+	}
+}

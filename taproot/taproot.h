@@ -70,6 +70,4 @@ TapRoot_Event* TapRoot_NextInQueue(TapRoot_EventQueue* queue); //read then inc
 
 bool TapRoot_QueueHasEvents(TapRoot_EventQueue* queue);
 
-
-
-
+TapRoot_EventQueue* GetQueue(TapRoot_ThreadGlobal* global, TapRoot_Id id);
