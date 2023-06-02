@@ -111,7 +111,7 @@ int32_t TapRoot_CreateWorker(TapRoot_ThreadGlobal* self, void* (*func)(void* thr
 	TapRoot_ThreadGlobal* thgl =  malloc(sizeof(TapRoot_ThreadGlobal));
 	memcpy(thgl, self, sizeof(TapRoot_ThreadGlobal));
 
-	if (thgl->Self + 1 < 0)
+	if (((thgl->Self + 1 ) & 0x0000FFFF) == 0)
 	{
 		return -1;
 	}
