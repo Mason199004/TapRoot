@@ -87,7 +87,7 @@ int TapRoot_PushEvent(TapRoot_Event event, TapRoot_Id destination, TapRoot_Threa
 
 void TapRoot_GetLock(TapRoot_EventQueue* queue)
 {
-	pthread_mutex_lock(&queue->mutex);
+	while (pthread_mutex_trylock(&queue->mutex));
 }
 
 int TapRoot_MaybeGetLock(TapRoot_EventQueue* queue)
@@ -170,7 +170,7 @@ void TapRoot_ResizeBuffer(TapRoot_ThreadGlobal* global, TapRoot_ResizableBuffer 
 			TapRoot_ThreadGlobal **NewGlobPtr = realloc(global->AddressableThreadGlobals,
 			                                            newSize * sizeof(TapRoot_ThreadGlobal *));
 			if (NewGlobPtr == NULL) {
-				//TODO: Handle
+				abort();
 			}
 			if (NewGlobPtr != global->AddressableThreadGlobals) {
 				global->AddressableThreadGlobals = NewGlobPtr;
@@ -178,7 +178,7 @@ void TapRoot_ResizeBuffer(TapRoot_ThreadGlobal* global, TapRoot_ResizableBuffer 
 
 			TapRoot_Id *NewListPtr = realloc(global->AddressableThreads, newSize * sizeof(TapRoot_Id));
 			if (NewListPtr == NULL) {
-				//TODO: Handle
+				abort();
 			}
 			if (NewListPtr != global->AddressableThreads) {
 				global->AddressableThreads = NewListPtr;
@@ -235,6 +235,7 @@ TapRoot_Event* TapRoot_NextInQueue(TapRoot_EventQueue* queue)
 
 	return &queue->EventQueue[queue->__iter++];
 }
+
 
 bool TapRoot_QueueHasEvents(TapRoot_EventQueue* queue)
 {
